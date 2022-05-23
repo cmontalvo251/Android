@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RandomNumbers</string>
+    <string name="buttonPress">Start</string>
+    <string name="stopfunction">Stop</string>
+</resources>
