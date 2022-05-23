@@ -1,2 +1,2 @@
-# android-studio
+# Android
 Collection of my own android apps
