@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ALScramble</string>
+    <string name="ScrambleMiles">Miles in Race</string>
+    <string name="StartTime">Start Time</string>
+    <string name="ScrambleHours">Hours in Race</string>
+    <string name="CurrentTime">Current Time</string>
+    <string name="MilesTraveled">Miles Traveled</string>
+    <string name="Compute">Compute</string>
+    <string name="RequiredPace">Required Pace (mph)</string>
+    <string name="MilesAhead">Miles Ahead or Behind</string>
+    <string name="MinutesAhead">Minutes Ahead or Behind</string>
+    <string name="DefaultMiles">65</string>
+    <string name="DefaultHours">8</string>
+    <string name="DefaultMinutes">00</string>
+    <string name="DefaultHourLength">24</string>
+    <string name="CurrentPace">Current Pace (mph)</string>
+    <string name="HoursAhead">Hours Ahead or Behind</string>
+</resources>
