@@ -34,6 +34,10 @@ You can then go through all the standard setup for git (init, add origin, ...). 
 to use the free text app you need to put your Github repo into the Downloads folder. For whatever reason
 I can only get the text app to save in that folder. So if you're reading this I hope your Android.git folder
 is in the Downloads directory.
+
+Also the only other difference is when you run the remote add origin command you will get an error saying you need to add this directory to the list of saved directories.
+
+$ git config --global --add safe.directory /storage/emulated/0/Downloads/Github/name_of_repo
     
 You can also install emacs btw with
     
