@@ -2,6 +2,12 @@
 
 Alright I am using a chrome book for the first time and learning how to set it up properly. 
 
+Before you do anything put your device in developer mode or it will reformat everything. 
+
+WHat you want to do is turn off your computer, press ESC, REFRESH and POWER all at the same time. Then hit CTRL+D 
+
+when random windows pop up.
+
 In order to start power coding you're going to need a few apps.
 
 APPs
