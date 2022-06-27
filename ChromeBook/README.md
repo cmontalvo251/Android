@@ -12,7 +12,7 @@ In order to start power coding you're going to need a few apps.
 
 APPs
 
-1. Termux - This app will allow you to run things in terminal. The directories are a bit odd
+1. Termux - This app will allow you to run things in terminal. The directories are a bit odd (NOte that in developer mode you can get an actual Linux Terminal)
 
 /storage/emulated/0 is the location of all your files but you can't access it right away.
 
