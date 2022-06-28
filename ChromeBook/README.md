@@ -20,6 +20,8 @@ I really really really like this chromebook.
 
 FYI - you can run sudo apt-get updates and installs to get g++ and other programs that you normally use to run code.
 
+Also emacs-nox works great in the terminal editor
+
 1. Termux - This app will allow you to run things in terminal. The directories are a bit odd (NOte that in developer mode you can get an actual Linux Terminal)
 
 /storage/emulated/0 is the location of all your files but you can't access it right away.
@@ -88,3 +90,108 @@ YOu can get the same app for your phone to test between chromebook and your phon
 Since you can download the Android.git repo you'll be able to run apps. Remember you need developmer mode access
 and permissions turned on to install programs from AIDE.
 
+5. LATEX
+
+-Ok so the easiest way is to download the repo github.com/cmontalvo251/LaTeX.git - check
+-and then just use overleaf on Chrome book - check
+-However now that I have a full linux kernel. Why don't I attempt to get pdflatex
+I got texlive 
+
+$ sudo apt-get install texlive
+
+I ran pdflatex and got an enumitem.sty error. Texlive on Linux Penguin is Basic Latex.
+You need to first initialize tlmgr
+
+$ tlmgr init-usertree
+
+Then you can try and install enumitem
+
+$ tlmgr --usermode install enumitem
+
+That then throws an error because Linux Penguin is 2020 and the latest is 2022. 
+So need to update tlmgr which requires this command
+
+$ sh update-tlmgr-latest.sh -- --upgrade
+
+Note you have to download that file here - https://tug.org/texlive/upgrade.html
+But I've also included that file in the LaTex.git repo. The command above throws an error
+because you don't have the path set properly. Looking online I find out that you really 
+need to run texlive-full but when I tried that it was 6GB. 
+
+So instead you need to manually install said packages. Here's an example on installing 
+enumitem.sty
+
+First download the .sty
+then run the following commands
+
+$ cd /usr/local/share/texmf/
+
+$ sudo mkdir tex
+
+$ cd tex
+
+$ sudo mkdir latex
+
+$ cd latex
+
+$ sudo mkdir enumitem
+
+$ cd enumitem
+
+$ sudo mv /path/to/download/enumitem.sty ./
+
+$ sudo mktexlsr
+
+That will manually install enumitem. Repeat as new package errors come up.
+
+6. C++ Code
+
+-Install g++ - check
+
+$ sudo apt-get install g++ 
+$ sudo apt-get install make
+$ sudo apt-get install libboost-all-dev
+
+-Download some C++ code - github.com/cmontalvo251/FASTKit.git
+
+-Compile some easy C++ code 
+
+$ cd FASTKit
+$ make simonly MODEL="airplane"
+$ ./simonly airplane/
+
+7. Python
+-Yes there are apps but I want to run in command line and view pdfs in chrome so first. python3 - check
+-install pip3 packages
+
+$ pip3 install matplotlib
+
+-but first get pip - Google get-pip.py and add pip3 location to PATH using bashrc and source - check
+-download my Python repos git@github.com:cmontalvo251/Python.git - check
+-add Python.git to PYTHONPATH on bashrc (make sure to use export) - check
+-run code on FASTKit.git - check
+
+$ python3 plotdata.py
+
+-open pdf in Files
+
+8. Steam
+
+Nothing yet unforuntately. 
+
+999. ACTIVITIES
+
+1.) Code App
+-I first need to be in developer mode - check
+-I then need to have AIDE installed and tested the hello world script - check
+-Finally I need the code of my other apps from github.com/cmontalvo251/Android.git - check
+-Next step is to run the ALscramble app - 
+
+2.) PBL paper
+-Ok so the easiest way is to download the repo github.com/cmontalvo251/LaTeX.git - check
+-and then just use overleaf on Chrome book - check
+-Installing texlive basic and then manually adding packages - WIP
+
+3.) Blog
+-Easy. Just install the Blogger extension under Tools after you log in in chrome. - check
+-Photos are in the photos app - check
