@@ -10,7 +10,15 @@ when random windows pop up.
 
 In order to start power coding you're going to need a few apps.
 
-APPs
+APPs 
+
+0. Terminal 
+
+Enabling developer mode will allow you to use an entire linux kernel. THis is way better than Termux below and you will
+have more control and it will feel just like home on Ubuntu. It's debian based and acts exactly like your computer at home.
+I really really really like this chromebook.
+
+FYI - you can run sudo apt-get updates and installs to get g++ and other programs that you normally use to run code.
 
 1. Termux - This app will allow you to run things in terminal. The directories are a bit odd (NOte that in developer mode you can get an actual Linux Terminal)
 
@@ -68,4 +76,15 @@ clicking the termux field which should hopefully be right below the Google Drive
 will be in the Downloads folder. The point though is that if you ever need to do some power coding in emacs
 you can move files to and fro.
 
+In developer mode you'll get access to something called 'Linux Files' This is a symbolic link to your $HOME directory for linux. Note sure exactly where it is but it doesn't matter at the moment.
+
 3. Text App - This app will allow you to edit files
+
+The good news about the text app is that you can save files to the linux folder that pops up on Files.
+
+4. AIDE - This app will allow you to make apps on your phone and chromebook. 
+
+YOu can get the same app for your phone to test between chromebook and your phone. Pretty awesome. 
+Since you can download the Android.git repo you'll be able to run apps. Remember you need developmer mode access
+and permissions turned on to install programs from AIDE.
+
