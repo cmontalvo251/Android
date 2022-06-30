@@ -190,7 +190,8 @@ Nothing yet unforuntately.
 2.) PBL paper
 -Ok so the easiest way is to download the repo github.com/cmontalvo251/LaTeX.git - check
 -and then just use overleaf on Chrome book - check
--Installing texlive basic and then manually adding packages - WIP
+-Installing texlive basic and then manually adding packages - check
+-Transfer over all PBL labs - check
 
 3.) Blog
 -Easy. Just install the Blogger extension under Tools after you log in in chrome. - check
