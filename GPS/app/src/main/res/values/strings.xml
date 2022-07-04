@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GPS</string>
+    <string name="set_origin">Set Origin</string>
+    <string name="stopfunction">Stop</string>
+    <string name="Latitude">Current Latitude</string>
+    <string name="Longitude">Current Longitude</string>
+</resources>
