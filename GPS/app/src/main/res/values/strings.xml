@@ -2,8 +2,9 @@
     <string name="app_name">GPS</string>
     <string name="set_origin">Set Origin</string>
     <string name="stopfunction">Stop</string>
-    <string name="Latitude">Current Latitude</string>
-    <string name="Longitude">Current Longitude</string>
-    <string name="OriginLat">Latitude Origin</string>
-    <string name="OriginLon">Longitude Origin</string>
+    <string name="Latitude">Current Latitude (deg)</string>
+    <string name="Longitude">Current Longitude (deg)</string>
+    <string name="OriginLat">Latitude Origin (deg)</string>
+    <string name="OriginLon">Longitude Origin (deg)</string>
+    <string name="Time">Current Time (sec)</string>
 </resources>

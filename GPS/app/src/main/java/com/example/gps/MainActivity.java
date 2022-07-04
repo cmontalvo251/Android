@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.location.GnssClock;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public float longitude = 0;
     public float latitude_origin = 0;
     public float longitude_origin = 0;
+    public float time = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         latitude = event.values[0];
         longitude = event.values[1];
+        time = 0;
         DisplayNumbers();
     }
 
     public void DisplayNumbers() {
+        //Time BOX
+        TextView textViewTime = findViewById(R.id.textViewTime);
+        String messageTime = String.valueOf(time);
+        textViewTime.setText(messageTime);
         ///Latitude BOX
         TextView textViewLAT = findViewById(R.id.textViewLatitude);
         String messageLAT = String.valueOf(latitude);
