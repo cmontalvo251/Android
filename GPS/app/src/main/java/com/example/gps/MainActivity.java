@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor accelerometer;
     public float latitude = 0;
     public float longitude = 0;
+    public float latitude_origin = 0;
+    public float longitude_origin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,20 +52,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void DisplayNumbers() {
-        ///X BOX
-        TextView textViewX = findViewById(R.id.textViewLatitude);
-        //x = rand.nextFloat();
-        String message = String.valueOf(latitude);
-        textViewX.setText(message);
-        //Y BOX
-        TextView textViewY = findViewById(R.id.textViewLongitude);
-        //y = rand.nextFloat();
-        String messagey = String.valueOf(longitude);
-        textViewY.setText(messagey);
+        ///Latitude BOX
+        TextView textViewLAT = findViewById(R.id.textViewLatitude);
+        String messageLAT = String.valueOf(latitude);
+        textViewLAT.setText(messageLAT);
+        //Longitude BOX
+        TextView textViewLON = findViewById(R.id.textViewLongitude);
+        String messageLON = String.valueOf(longitude);
+        textViewLON.setText(messageLON);
     }
 
     //Called when user hits the set origin button
     public void SetOrigin(View view) {
-        DisplayNumbers();
+        latitude_origin = latitude;
+        longitude_origin = longitude;
+        ///Latitude BOX
+        TextView textViewLATO = findViewById(R.id.textViewLatitudeOrigin);
+        String messageLATO = String.valueOf(latitude_origin);
+        textViewLATO.setText(messageLATO);
+        //Longitude BOX
+        TextView textViewLONO = findViewById(R.id.textViewLongitudeOrigin);
+        String messageLONO = String.valueOf(longitude_origin);
+        textViewLONO.setText(messageLONO);
     }
 }

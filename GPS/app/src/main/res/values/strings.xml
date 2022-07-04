@@ -4,4 +4,6 @@
     <string name="stopfunction">Stop</string>
     <string name="Latitude">Current Latitude</string>
     <string name="Longitude">Current Longitude</string>
+    <string name="OriginLat">Latitude Origin</string>
+    <string name="OriginLon">Longitude Origin</string>
 </resources>
