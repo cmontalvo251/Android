@@ -41,6 +41,17 @@
         app:layout_constraintTop_toBottomOf="@+id/switchCD" />
 
     <Switch
+        android:id="@+id/switchM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:checked="false"
+        android:text="Marriage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchXR" />
+
+    <Switch
         android:id="@+id/switchXR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

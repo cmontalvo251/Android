@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Random;
@@ -192,7 +191,6 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("What's the worst date you've been on?");
 			Questions.add("Play never have I ever (just 5 fingers)");
 			Questions.add("What's your relationship with your parents like?");
-			Questions.add("How many kids do you want?");
 			Questions.add("Favorite date night activity?");
 			Questions.add("What is one thing you like to receive in a relationship.?");
 			Questions.add("What's one way to create connection in a hectic environment like a party?");
@@ -225,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Am I a safe person for you to talk to? How to make it better?");
 			Questions.add("Tell me a mistake in a relationship that taught you a lesson?");
 			Questions.add("How do you handle conflict?");
+			Questions.add("How many kids do you want? Do you even wants kids? Adoption?");
 			Questions.add("What's your favorite thing about me?");
 			Questions.add("When did your last relationship end and what did it teach you?");
 			Questions.add("Have you ever been in a relationship where your partner had strong emotional needs? How did you handle it?");
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("If we lived together, who would do what chores around the house?");
 			Questions.add("If we had kids what would be everyone's responsibility? Like traditional gender roles or not?");
 			Questions.add("What are the expectation for time with each other versus time with friends and family?");
-
+			Questions.add("Have you thought about asking the marriage questions? Maybe you're not thinking about marriage but there are some good ones in there.");
 		}
 		Switch swXR = (Switch) findViewById(R.id.switchXR);
 		boolean isCheckedXR = swXR.isChecked();
@@ -259,6 +258,33 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Tits or ass?");
 			Questions.add("Does size matter?");
 			Questions.add("What does sex mean to you?");
+		}
+		Switch swM = (Switch) findViewById(R.id.switchM);
+		boolean isCheckedM = swM.isChecked();
+		if (isCheckedM) {
+			//Questions to ask before you get married
+			Questions.add("Be sure you've asked everyone question in this game. Nothing should be off the table when considering to get married.");
+			Questions.add("Why do you want to get married?");
+			Questions.add("What roles do you foresee in the home (dishes, childcare, cleaning, car and house maintenance etc)?");
+			Questions.add("If one spouse is offered a career promotion requiring re-location, how will you make a decision as a couple?");
+			Questions.add("How will an income differential affect the relationship?");
+			Questions.add("How do you feel about your spouse bringing work home?");
+			Questions.add("How do you feel about attending an office party for your spouse?");
+			Questions.add("How do you feel about entertaining people from work?");
+			Questions.add("How will you handle long distance travel? (Loneliness, kids, etc)?");
+			Questions.add("How do you feel about working late?");
+			Questions.add("How do you feel about your spouse working with someone of the opposite sex?");
+			Questions.add("Rank these in order of importance: Career, Friends, Children, Marriage, Spirituality, Chores, Parents, Leisure");
+			Questions.add("What is your opinion about spending time with single friends (same sex) after you are married?");
+			Questions.add("How important is it to you for you to both have mutual (or individual) friends?");
+			Questions.add("What is appropriate for you to share about your marriage to friends and family? What needs to be kept within the marriage?");
+			Questions.add("How often do you foresee seeing your parents?");
+			Questions.add("What will be your holiday plans after marriage?");
+			Questions.add("How close do you want to live ideally to your parents?");
+			Questions.add("Under what circumstances will you accept financial assistance from your parents?");
+			Questions.add("Under what circumstances will you offer financial assistance to your parents?");
+			Questions.add("If we plan on having kids, what will be the roles of the grandparents?");
+			Questions.add("Will spirituality be important in your marriage? If so, how will you grow spiritually together (church, faith, ministries, prayer, etc)?");
 		}
 		//////////////UPDATE NUMBER OF QUESTIONS//////////////
 		index = 0;
