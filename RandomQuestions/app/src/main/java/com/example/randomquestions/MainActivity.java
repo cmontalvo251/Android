@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Random;
 import java.util.ArrayList;
@@ -221,23 +222,66 @@ public class MainActivity extends AppCompatActivity {
     /** Called when the user taps the Send button */
     public void GenerateQuestions(View view) {
         TextView textViewX = findViewById(R.id.textViewX);
-        String message = Questions.get(index);
-        index+=1;
-        if (index > NumberOfQuestions-1) {
-            index = 0;
-        }
+		String message = "You need to hit the rest button first";
+		if (NumberOfQuestions > 0) {
+			message = Questions.get(index);
+			index += 1;
+			if (index > NumberOfQuestions - 1) {
+				index = 0;
+			}
+		}
         textViewX.setText(message);
         SetQuestionCounter(view);
     }
 
     /** Called When user hits the reset button **/
     public void Reset(View view) {
-        TextView textViewX = findViewById(R.id.textViewX);
-        String message = "Resetting Questions!!!";
+		//Reset number of questions
+		NumberOfQuestions = 0;
+		Questions.clear();
+		//Check status of switches
+		Switch swFF = (Switch) findViewById(R.id.switchFF);
+		boolean isCheckedFF = swFF.isChecked();
+		if (isCheckedFF) {
+			// The toggle is enabled
+			//Add Family Friendly Questions
+		}
+		Switch swPR = (Switch) findViewById(R.id.switchPR);
+		boolean isCheckedPR = swPR.isChecked();
+		if (isCheckedPR) {
+			// The toggle is enabled
+			//Add Politics and Religion
+		}
+		Switch swCD = (Switch) findViewById(R.id.switchCD);
+		boolean isCheckedCD = swCD.isChecked();
+		if (isCheckedCD) {
+			// The toggle is enabled
+			//Add Casually Dating
+		}
+		Switch swSD = (Switch) findViewById(R.id.switchSD);
+		boolean isCheckedSD = swSD.isChecked();
+		if (isCheckedSD) {
+			// The toggle is enabled
+			// Add Seriously Dating
+		}
+		Switch swXR = (Switch) findViewById(R.id.switchXR);
+		boolean isCheckedXR = swXR.isChecked();
+		if (isCheckedXR) {
+			// The toggle is enabled
+			// Add X-Rated
+		}
+		//////////////UPDATE NUMBER OF QUESTIONS//////////////
+		index = 0;
+		SetQuestionCounter(view);
+		//////////////UPDATE TEXT///////////////////////////
+		TextView textViewX = findViewById(R.id.textViewX);
+		String message = "Default";
+		if (NumberOfQuestions == 0) {
+			message = "You need to switch one of the toggles below!!!"
+		} else {
+			message = "Resetting Questions!!!";
+			Collections.shuffle(Questions);
+		}
         textViewX.setText(message);
-        //Reset counter to 0
-        index = 0;
-        SetQuestionCounter(view);
-        Collections.shuffle(Questions);
     }
 }
