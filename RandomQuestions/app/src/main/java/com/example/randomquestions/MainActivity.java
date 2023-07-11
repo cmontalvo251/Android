@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     /** Called when the user taps the Send button */
     public void GenerateQuestions(View view) {
         TextView textViewX = findViewById(R.id.textViewX);
-		String message = "You need to hit the rest button first";
+		String message = "You need to hit the reset button first";
 		if (NumberOfQuestions > 0) {
 			message = Questions.get(index);
 			index += 1;
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
 		TextView textViewX = findViewById(R.id.textViewX);
 		String message = "Default";
 		if (NumberOfQuestions == 0) {
-			message = "You need to switch one of the toggles below!!!"
+			message = "You need to switch one of the toggles below!!!";
 		} else {
 			message = "Resetting Questions!!!";
 			Collections.shuffle(Questions);
