@@ -183,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
 			//DATING CASUALLY
 			Questions.add("What do you wish for our relationship?");
 			Questions.add("What do you admire most about me?");
+			Questions.add("Can I post photos of us on social media?");
+			Questions.add("What are you expectations with integrating with my life (friends, family, kids)?");
 			Questions.add("What are your love languages?");
 			Questions.add("Tell me about your first crush");
 			Questions.add("Who was the first person you kissed?");
@@ -215,8 +217,10 @@ public class MainActivity extends AppCompatActivity {
 			// Add Seriously Dating
 			//DATING SERIOUSLY
 			Questions.add("Describe your childhood trauma");
+			Questions.add("What are your expectations for communication throughout the day (texting, calls, check-ins)?");
 			Questions.add("Have you ever cheated on a past partner?");
 			Questions.add("What do I do that irritates you the most?");
+			Questions.add("How do you feel about saying 'I love you'?");
 			Questions.add("Would you consider ever going to couple's counseling?");
 			Questions.add("How do you feel about relationships with the opposite sex?");
 			Questions.add("Can you describe one of your previous relationships?");
@@ -227,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Am I a safe person for you to talk to? How to make it better?");
 			Questions.add("Tell me a mistake in a relationship that taught you a lesson?");
 			Questions.add("How do you handle conflict?");
+			Questions.add("How can I support you during difficult times in your life?");
 			Questions.add("Have you ever been abused in any way (emotional or physical)?");
 			Questions.add("Do you have an addition to anything? (Drugs, alcohol, gambling, TV, porn, etc)");
 			Questions.add("How many kids do you want? Do you even wants kids? Adoption?");
@@ -235,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Have you ever been in a relationship where your partner had strong emotional needs? How did you handle it?");
 			Questions.add("Are you still friends with your ex? If not do you at least still talk?");
 			Questions.add("Are you open to marriage? Why or why not?");
+			Questions.add("Are you willing to co-habitate before getting married?");
 			Questions.add("If we lived together, who would do what chores around the house?");
 			Questions.add("If we had kids what would be everyone's responsibility? Like traditional gender roles or not?");
 			Questions.add("What are the expectation for time with each other versus time with friends and family?");
@@ -249,16 +255,18 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Do you like massages? Where?");
 			Questions.add("What does physical intimacy look like to you?");
 			Questions.add("Cuddles or kisses?");
+			Questions.add("How do you feel about PDA in front of people you don't know vs family vs friends?");
 			Questions.add("What do I do that turns you on the most?");
 			Questions.add("When did your parents talk to you about sex?");
 			Questions.add("Tell me about your previous sexual partners");
 			Questions.add("Have you ever had a bad hookup?");
 			Questions.add("What part of your body do you most like to be touched?");
 			Questions.add("What do you do in the shower?");
-			Questions.add("Have you ever had a threesome?");
+			Questions.add("Have you ever had a threesome? Is that something you want to do in our relationship?");
 			Questions.add("Where is the craziest place you've had sex?");
 			Questions.add("What is your favorite sex move?");
 			Questions.add("What is your favorite sex position?");
+			Questions.add("Have you ever had an orgasm? If so how? If not, how does that make you feel?")
 			Questions.add("What's your favorite part of my body?");
 			Questions.add("How do you feel about your partner watching porn without you in a committed relationship?");
 			Questions.add("How do you feel about your partner masturbating in a committed relationship?");
@@ -276,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
 		boolean isCheckedM = swM.isChecked();
 		if (isCheckedM) {
 			//Questions to ask before you get married
+			//MARRIAGE
 			Questions.add("Be sure you've asked everyone question in this game. Nothing should be off the table when considering to get married.");
 			Questions.add("Why do you want to get married?");
 			Questions.add("What roles do you foresee in the home (dishes, childcare, cleaning, car and house maintenance etc)?");
