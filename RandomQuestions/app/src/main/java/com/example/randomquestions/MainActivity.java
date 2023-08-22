@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Where is the craziest place you've had sex?");
 			Questions.add("What is your favorite sex move?");
 			Questions.add("What is your favorite sex position?");
-			Questions.add("Have you ever had an orgasm? If so how? If not, how does that make you feel?")
+			Questions.add("Have you ever had an orgasm? If so how? If not, how does that make you feel?");
 			Questions.add("What's your favorite part of my body?");
 			Questions.add("How do you feel about your partner watching porn without you in a committed relationship?");
 			Questions.add("How do you feel about your partner masturbating in a committed relationship?");
