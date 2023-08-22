@@ -219,6 +219,16 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Describe your childhood trauma");
 			Questions.add("What are your expectations for communication throughout the day (texting, calls, check-ins)?");
 			Questions.add("Have you ever cheated on a past partner?");
+			Questions.add("If I do end up cheating on you would you rather just break up or discuss the issue and try and resolve it together?");
+			Questions.add("Do you want to know if an ex is contacting me?");
+			Questions.add("Do you want me to tell you when someone has a crush on me?");
+			Questions.add("How do you feel about me innocently flirting with other people?");
+			Questions.add("Do you want me to tell you if one of my friends or family members doesn't like you?");
+			Questions.add("How do you define emotional cheating and if I did emotionally cheat would you want me to tell you about it?");
+			Questions.add("Do you want me to share any doubts I have about the relationship or only bring it up if it becomes a big problem?");
+			Questions.add("How private does our relationship need to be in terms of sharing details of the relationship with friends or family?");
+			Questions.add("Do you want our phones remain private or is it something that you want to have free access too?");
+			Questions.add("How do you feel about me maintaining friendships with people I've had a prior romantic relationship with?");
 			Questions.add("What do I do that irritates you the most?");
 			Questions.add("How do you feel about saying 'I love you'?");
 			Questions.add("Would you consider ever going to couple's counseling?");
