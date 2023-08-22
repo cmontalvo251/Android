@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("What's your favorite food?");
 			Questions.add("What are ten things you would bring to a desert island?");
 			Questions.add("What is your favorite movie?");
+			Questions.add("What movie do you basically have memorized?");
+			Questions.add("When you fly do you prefer the window or aisle seat?");
+			Questions.add("What's something you love but others hate?");
+			Questions.add("What's your best animal impression?");
 			Questions.add("Chocolate or Flowers");
 			Questions.add("What's a new hobby you'd like to try?");
 			Questions.add("If you could change one thing about your looks what would it be?");
