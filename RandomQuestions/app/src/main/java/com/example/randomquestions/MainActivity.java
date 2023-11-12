@@ -1,6 +1,9 @@
 package com.example.randomquestions;
 
+///For Android Version 11.0+
 import androidx.appcompat.app.AppCompatActivity;
+//For Android Version 9.0
+//import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
