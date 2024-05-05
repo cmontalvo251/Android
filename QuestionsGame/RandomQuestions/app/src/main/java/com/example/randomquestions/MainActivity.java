@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 			//Add Family Friendly Questions
 			///FAMILY FRIENDLY
 			Questions.add("What's your sign?");
+			Questions.add("What is the best compliment you have ever received?");
 			Questions.add("What is your relationship with cheese?");
 			Questions.add("Give me an example of a pet peeve?");
 			Questions.add("What is your favorite color?");
@@ -168,10 +169,12 @@ public class MainActivity extends AppCompatActivity {
 			//POLITICS AND RELIGION
 			Questions.add("Do you believe in ghosts?");
 			Questions.add("Do you believe in horoscopes?");
+			Questions.add("What is your most controversial opinion?");
 			Questions.add("Do you believe in conspiracy theories?");
 			Questions.add("Thoughts on gay marriage?");
 			Questions.add("Thoughts on abortion?");
 			Questions.add("Thoughts on Transgender?");
+			Questions.add("How would you feel if a family member (sibling, parent, child) did not identify with their sex at birth?");
 			Questions.add("Political Views in general?");
 			Questions.add("What's your faith life like?");
 			Questions.add("Do you go to church?");
@@ -179,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Do you believe in an afterlife?");
 			Questions.add("Trump?");
 			Questions.add("Do you believe in karma?");
+			Questions.add("Do you believe in abortion if you knew the child would be disabled?");
 			Questions.add("Do you think religion is important for a relationship?");
 		}
 		Switch swCD = (Switch) findViewById(R.id.switchCD);
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("What are your non negotiables and deal breakers?");
 			Questions.add("Do you go to therapy?");
 			Questions.add("How do you consume your weed?");
+			Questions.add("What do you typically do for mothers day and fathers day?");
 			Questions.add("Do you do drugs?");
 			Questions.add("Have you ever been addicted to anything?");
 		}
@@ -318,6 +323,9 @@ public class MainActivity extends AppCompatActivity {
 			//MARRIAGE
 			Questions.add("Be sure you've asked everyone question in this game. Nothing should be off the table when considering to get married.");
 			Questions.add("Why do you want to get married?");
+			Questions.add("What are the expectations for holidays?");
+			Questions.add("Who will handle conflict within extended family?");
+			Questions.add("Who will plan trips with extended family?");
 			Questions.add("What roles do you foresee in the home (dishes, childcare, cleaning, car and house maintenance etc)?");
 			Questions.add("If one spouse is offered a career promotion requiring re-location, how will you make a decision as a couple?");
 			Questions.add("How will an income differential affect the relationship?");
@@ -358,8 +366,12 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("If you already have children, how will you parent shared children?");
 			Questions.add("Does your family and extended family like and welcome your partner into their lives?");
 			Questions.add("Do you feel welcome in your partners family?");
+			Questions.add("Is there ever a circumstance where physical discipline is appropriate for children?");
+			Questions.add("If we are going to raise kids together, what is your parenting philosophy?");
 			Questions.add("If you found out your partner cheated on you, would you immediately get divorced?");
 			Questions.add("Will spirituality be important in your marriage? If so, how will you grow spiritually together (church, faith, ministries, prayer, etc)?");
+			Questions.add("How would you feel about your child holding a different faith belief than you?");
+
 		}
 		//////////////UPDATE NUMBER OF QUESTIONS//////////////
 		index = 0;
