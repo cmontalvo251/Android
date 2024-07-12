@@ -60,8 +60,15 @@ public class MainActivity extends AppCompatActivity {
 			// The toggle is enabled
 			//Add Family Friendly Questions
 			///FAMILY FRIENDLY
-			Questions.add("What's your sign?");
+			Questions.add("What's your zodiac sign (more importantly, when is your birthday)?");
 			Questions.add("What is the best compliment you have ever received?");
+			Questions.add("Given the choice of anyone in the world, whom would you want as a dinner guest?");
+			Questions.add("Would you like to be famous? In what way?");
+			Questions.add("Before making a telephone call, do you ever rehearse what you are going to say? Why or why not?");
+			Questions.add("What would constitute a perfect day for you?");
+			Questions.add("When did you last sing to yourself?");
+			Questions.add("When did you last sing to someone else?");
+			Questions.add("If you were able to live to the age of 90 and retain either the mind of a 30 year old or the body of a 30 year for the years from 30-90 what would you choose and why?");
 			Questions.add("What is your relationship with cheese?");
 			Questions.add("Give me an example of a pet peeve?");
 			Questions.add("What is your favorite color?");
@@ -152,11 +159,15 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("What's your favorite city you've visited?");
 			Questions.add("What fictional place do you want to visit?");
 			Questions.add("What's your favorite junk food?");
+			Questions.add("If you could wake up tomorrow having gained any one quality or ability, what would it be?");
 			Questions.add("What junk food has no effect on you?");
 			Questions.add("What would you do during a significant natural disaster (like a fire sail)?");
 			Questions.add("What's your weapon of choice during a zombie apocalypse?");
 			Questions.add("What's something super popular that you're not into?");
 			Questions.add("What's your biggest pet peeve?");
+			Questions.add("What is your most treasured memory?");
+			Questions.add("What is your most terrible memory?");
+			Questions.add("What are you most grateful for in life?");
 			Questions.add("What are you like when there's a ton of traffic?");
 			Questions.add("What is our biggest inconvenience because other people ruined it?");
 			Questions.add("If you could ask anyone a question and get a legitimate answer what and who would you ask?");
@@ -171,7 +182,10 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Do you believe in horoscopes?");
 			Questions.add("What is your most controversial opinion?");
 			Questions.add("Do you believe in conspiracy theories?");
+			Questions.add("Do you fear death?");
+			Questions.add("If you were to die tonight what is something you wished you had told someone?");
 			Questions.add("Thoughts on gay marriage?");
+			Questions.add("If you knew that in one year you would die suddenly, would you change anything about the way you are now living? Why?");
 			Questions.add("Thoughts on abortion?");
 			Questions.add("Thoughts on Transgender?");
 			Questions.add("How would you feel if a family member (sibling, parent, child) did not identify with their sex at birth?");
@@ -181,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("How do you feel about meditation?");
 			Questions.add("Do you believe in an afterlife?");
 			Questions.add("Trump?");
+			Questions.add("Whose death you would find the hardest to deal with?");
+			Questions.add("Do you have a secret hunch about how you will die?");
 			Questions.add("Do you believe in karma?");
 			Questions.add("Do you believe in abortion if you knew the child would be disabled?");
 			Questions.add("Do you think religion is important for a relationship?");
@@ -191,8 +207,18 @@ public class MainActivity extends AppCompatActivity {
 			// The toggle is enabled
 			//Add Casually Dating
 			//DATING CASUALLY
+			Questions.add("What does friendship mean to you as opposed to dating?");
+			Questions.add("How close and warm is your family? Do you feel your childhood was happier than most other people's lives?");
+			Questions.add("If a crystal ball could tell you the truth about yourself, your life, the future or anything else what would you want to know?");
+			Questions.add("Is there something that you have dreamed of doing for a long time? Why have you not done it yet?");
+			Questions.add("What is the greatest accomplishment of your life?");
+			Questions.add("What do you value most in a friendship?");
 			Questions.add("What do you wish for our relationship?");
+			Questions.add("If your house caught fire and you had time to save one thing, what would it be?");
 			Questions.add("What do you admire most about me?");
+			Questions.add("What 3 things to we have in common?");
+			Questions.add("If you could change anything about the way you were raised, what would it be?");
+			Questions.add("Set a timer for 4 minutes and tell your life story in as much detail as possible");
 			Questions.add("Can I post photos of us on social media?");
 			Questions.add("What are you expectations with integrating with my life (friends, family, kids)?");
 			Questions.add("What are your love languages?");
@@ -223,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("How do you consume your weed?");
 			Questions.add("What do you typically do for mothers day and fathers day?");
 			Questions.add("Do you do drugs?");
+			Questions.add("What is something that is too serious to be joked about?");
 			Questions.add("Have you ever been addicted to anything?");
 		}
 		Switch swSD = (Switch) findViewById(R.id.switchSD);
@@ -231,7 +258,10 @@ public class MainActivity extends AppCompatActivity {
 			// The toggle is enabled
 			// Add Seriously Dating
 			//DATING SERIOUSLY
+			Questions.add("What roles do love and affection play in your life?");
+			Questions.add("Alternate sharing something you consider a positive characteristic of your partner. Share a total of 5 things each");
 			Questions.add("If I cheat on you and feel terrible about it, do you want me to tell you or deal with it on my own?");
+			Questions.add("When did you last cry in front of another person? By yourself?");
 			Questions.add("Do you want to know if an ex is contacting me or just keep it to myself?");
 			Questions.add("Do you want our phones to remain private or are they free to be looked at whenever you want?");
 			Questions.add("How do you feel about me maintaining friendships with people where I've had prior romantic relationships with?");
@@ -266,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Am I a safe person for you to talk to? How to make it better?");
 			Questions.add("Tell me a mistake in a relationship that taught you a lesson?");
 			Questions.add("How do you handle conflict?");
+			Questions.add("What is a problem you are currently dealing with right now?");
 			Questions.add("How can I support you during difficult times in your life?");
 			Questions.add("Have you ever been abused in any way (emotional or physical)?");
 			Questions.add("Do you have an addition to anything? (Drugs, alcohol, gambling, TV, porn, etc)");
@@ -290,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 			Questions.add("Do you like massages? Where?");
 			Questions.add("What does physical intimacy look like to you?");
 			Questions.add("Cuddles or kisses?");
+			Questions.add("What is the weirdest thing you have used to jackoff?");
 			Questions.add("How wide can you stretch your ball sack or your vagina?");
 			Questions.add("How do you feel about PDA in front of people you don't know vs family vs friends?");
 			Questions.add("What do I do that turns you on the most?");
