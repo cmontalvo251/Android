@@ -35,5 +35,6 @@ public class XRated {
         Questions.add("Are there certain sexual activities that are off the table?");
         Questions.add("What does intimacy mean to you?");
         Questions.add("What does 'making love' mean to you?");
+        Questions.add("How do you feel about being nude in public?");
     }
 }
