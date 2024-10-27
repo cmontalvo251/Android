@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
+///Edits
+// 10/27/2024 - 310 questions but added 4 questions to the marriage category. There are now 314 questions
+
 public class MainActivity extends AppCompatActivity {
     Random rand = new Random();
     List<String> Questions = new ArrayList<String>();

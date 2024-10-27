@@ -12,10 +12,12 @@ public class Marriage {
         Questions.add("If one spouse is offered a career promotion requiring re-location, how will you make a decision as a couple?");
         Questions.add("How will an income differential affect the relationship?");
         Questions.add("How do you feel about your spouse bringing work home?");
+        Questions.add("How do you feel about your spouse receiving work related phone calls at home?");
         Questions.add("How do you feel about attending an office party for your spouse?");
         Questions.add("How do you feel about entertaining people from work?");
         Questions.add("How will you handle long distance travel? (Loneliness, kids, etc)?");
         Questions.add("How do you feel about working late?");
+        Questions.add("After you both come home in the evening, what are your expectations about dinner and clean-up?");
         Questions.add("How will you handle your finances? (who pays for what? , Separate bank accounts?, Debt?, Toys?)");
         Questions.add("How do you feel about your spouse working with someone of the opposite sex?");
         Questions.add("Rank these in order of importance: Career, Friends, Children, Marriage, Spirituality, Chores, Parents, Leisure");
@@ -32,6 +34,8 @@ public class Marriage {
         Questions.add("Do you hold grudges?");
         Questions.add("Is there any outside pressure to get married?");
         Questions.add("Agree or disagree: I can't handle being single");
+        Questions.add("How will you respond to parents/in-laws giving unsolicited advice?");
+        Questions.add("Under what conditions will you seek advice outside of the marriage (counseling, friends, parents)?");
         Questions.add("What does 'Being faithful/cheating' mean to you in a marriage?");
         Questions.add("Are there things your partner does that you hope they will change? What are they? Note: You cannot force someone to change.");
         Questions.add("Can you relax and be yourself around your partner?");
