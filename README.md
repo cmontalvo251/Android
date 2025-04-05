@@ -1,4 +1,12 @@
 # Android
+To transfer stuff from old ARCHIVE to new Meerkat you need to copy
+strings.xml
+activity_main.xml
+Main_Activity.java
+but you need to make a new Empty project with an empty activity and set the language to 
+java
+
+
 Collection of my own android apps
 
 First I downloaded Android Studio on my computer
