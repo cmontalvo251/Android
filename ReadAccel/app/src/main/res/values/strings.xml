@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Read Accel</string>
+    <string name="app_name">ReadAccel</string>
     <string name="buttonPress">Start</string>
     <string name="stopfunction">Stop</string>
 </resources>
