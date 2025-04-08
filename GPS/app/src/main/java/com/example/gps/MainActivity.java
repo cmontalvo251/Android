@@ -12,10 +12,17 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     public double latitude = 0;
     public double longitude = 0;
     public double latitude_origin = -99;
@@ -37,10 +44,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Initialize Sensor Manager
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //Initialize Accelerometer
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //Initialize GPS
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                time+=1;
+                if (LATLONSET) {
+                    Compute();
+                }
+                DisplayNumbers();
+            }
+        };
+        startGPS();
     }
-
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
@@ -49,24 +72,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
+        //Resume the Accelerometer
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        //Resume GPS
+        startGPS();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //Pause the accelerometer
         sensorManager.unregisterListener(this);
+        //Pause the GPS
+        locationManager.removeUpdates(locationListener);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        latitude = event.values[0];
-        longitude = event.values[1];
-        time+=1;
-        if (LATLONSET) {
-            Compute();
+       //Nothing for the accelerometer. This is here because of archaic code
+    }
+
+    public void startGPS() {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
         }
-        DisplayNumbers();
     }
 
     public void Compute() {
