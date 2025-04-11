@@ -3,8 +3,10 @@ package com.example.gps;
 import java.lang.Math;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,7 +14,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.location.Criteria;
+import android.os.Handler;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public double longitude = 0;
     public double latitude_origin = -99;
     public double longitude_origin = -99;
+    public double gps_speed = 0;
     public double time = 0;
     public double time_prev = 0;
     public double X = 0;
@@ -39,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public double v_prev = 0;
     public double D = 0;
     public boolean LATLONSET = false;
+    public double startTime = -99;
+    //Create a handler to update the numbers
+    public Handler handler = new Handler();
+    public Runnable runnable;
+    public static final int LOOP_INTERVAL_MS = 100; // 100 ms = 10 Hz
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +63,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                time+=1;
+                gps_speed = location.getSpeed();
+            }
+        };
+        //Start the GPS
+        startGPS();
+        //Get the start time
+        startTime = System.currentTimeMillis() / 1000.0;
+        //Kick off the runnable function to run at a set loop interval
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Get time elapsed from start time
+                time = System.currentTimeMillis() / 1000.0 - startTime;
+                //If LATLON origin has been set, start computing
                 if (LATLONSET) {
                     Compute();
                 }
+                //No matter what update the numbers you've got.
                 DisplayNumbers();
+                //Then execute the run() function again after the loop interval
+                handler.postDelayed(this,LOOP_INTERVAL_MS);
             }
         };
-        startGPS();
+        //Don't forget to actually start the loop
+        handler.post(runnable);
     }
+
+    //Make sure you kill the runnable on destroy
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop the loop when the activity is destroyed
+        handler.removeCallbacks(runnable);
+    }
+
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
@@ -94,6 +128,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void startGPS() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
         }
     }
@@ -102,21 +146,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //First convert Latitude and longitude to X and Y
         double NM2FT= 6076.115485560000F;
         double FT2M= 0.3048F;
-        X = (latitude - latitude_origin)*60*NM2FT*FT2M; //#%%//North direction - Xf , meters
-        Y = (longitude - longitude_origin)*60*NM2FT*FT2M*Math.cos(latitude_origin*Math.PI/180.0); //#%%//East direction - Yf, meters
+        double X_new = (latitude - latitude_origin)*60*NM2FT*FT2M; //#%%//North direction - Xf , meters
+        double Y_new = (longitude - longitude_origin)*60*NM2FT*FT2M*Math.cos(latitude_origin*Math.PI/180.0); //#%%//East direction - Yf, meters
         //Then compute velocity in the X and Y directions
-        double dx = (X-x_prev)*3.28/5280.0; //convert to miles
-        double dy = (Y-y_prev)*3.28/5280.0; //convert to miles
+        double dx = (X_new-x_prev)*3.28/5280.0; //convert to miles
+        double dy = (Y_new-y_prev)*3.28/5280.0; //convert to miles
         double dt = (time - time_prev)/3600.0; //convert to hours
-        VX = dx / dt;
-        VY = dy / dt;
+        double D_add = Math.sqrt(dx*dx+dy*dy);
+        double VX_new = dx / dt;
+        double VY_new = dy / dt;
         //Compute the total velocity
-        double v_new = Math.sqrt(VX*VX + VY*VY);
+        double v_new = Math.sqrt(VX_new*VX_new + VY_new*VY_new);
+        //Throw out velocities that are ridiculous
+        if (v_new > 200) {
+            //My car won't even do 200 mph
+            return;
+        }
+        //Also just return if you haven't moved enough
+        if (D_add < 0.01) {
+            return;
+        }
+        //Otherwise reset the values
+        X = X_new;
+        Y = Y_new;
+        VX = VX_new;
+        VY = VY_new;
         //Filter the signal
         double s = 0.5;
         V = s*v_new + (1-s)*v_prev;
         //Compute total distance traveled
-        D += Math.sqrt(dx*dx+dy*dy);
+        D += D_add;
         //Then reset prev values
         x_prev = X;
         y_prev = Y;
@@ -127,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void DisplayNumbers() {
         //Time BOX
         TextView textViewTime = findViewById(R.id.textViewTime);
-        String messageTime = String.valueOf(time);
+        String messageTime = String.format("%.2f",time);
         textViewTime.setText(messageTime);
         ///Latitude BOX
         TextView textViewLAT = findViewById(R.id.textViewLatitude);
@@ -157,6 +216,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextView textViewV = findViewById(R.id.textViewV);
         String messageV = String.format("%.4f",V);
         textViewV.setText(messageV);
+        //Velocity Directly from GPS
+        TextView textViewGPSV = findViewById(R.id.textViewGPSV);
+        String messageGPSV = String.format("%.4f",gps_speed);
+        textViewGPSV.setText(messageGPSV);
 	    //Current Distance
         TextView textViewD = findViewById(R.id.textViewD);
         String messageD = String.format("%.4f",D);
@@ -187,5 +250,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         V = 0;
         v_prev = 0;
         D = 0;
+        startTime = System.currentTimeMillis()/1000.0;
     }
 }

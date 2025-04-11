@@ -7,10 +7,11 @@
     <string name="OriginLat">Latitude Origin (deg)</string>
     <string name="OriginLon">Longitude Origin (deg)</string>
     <string name="Time">Current Time (sec)</string>
-    <string name="CurrentX">Current X Position (mi)</string>
-    <string name="CurrentY">Current Y Position (mi)</string>
-    <string name="CurrentVX">Current Velocity X (mph)</string>
-    <string name="CurrentVY">Current Velocity Y (mph)</string>
-    <string name="CurrentV">Current Velocity (mph)</string>
-    <string name="Position">Total Distance Traveled (mi)</string>
+    <string name="CurrentX">Calculated X Position (mi)</string>
+    <string name="CurrentY">Calculated Y Position (mi)</string>
+    <string name="CurrentVX">Calculated Velocity X (mph)</string>
+    <string name="CurrentVY">Calculated Velocity Y (mph)</string>
+    <string name="CurrentV">Calculated Velocity (mph)</string>
+    <string name="Position">Calculated Distance Traveled (mi)</string>
+    <string name="GPSSpeed">Speed from GPS (mph)</string>
 </resources>
