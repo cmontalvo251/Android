@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                gps_speed = location.getSpeed();
+                gps_speed = location.getSpeed()*2.23694; //convert from m/s to mph
             }
         };
         //Start the GPS
@@ -144,13 +144,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void Compute() {
         //First convert Latitude and longitude to X and Y
-        double NM2FT= 6076.115485560000F;
-        double FT2M= 0.3048F;
-        double X_new = (latitude - latitude_origin)*60*NM2FT*FT2M; //#%%//North direction - Xf , meters
-        double Y_new = (longitude - longitude_origin)*60*NM2FT*FT2M*Math.cos(latitude_origin*Math.PI/180.0); //#%%//East direction - Yf, meters
+        double NM2MI = 1.15078F;
+        double X_new = (latitude - latitude_origin)*60*NM2MI; //#%%//North direction - Xf , miles
+        double Y_new = (longitude - longitude_origin)*60*NM2MI*Math.cos(latitude_origin*Math.PI/180.0); //#%%//East direction - Yf, miles
         //Then compute velocity in the X and Y directions
-        double dx = (X_new-x_prev)*3.28/5280.0; //convert to miles
-        double dy = (Y_new-y_prev)*3.28/5280.0; //convert to miles
+        double dx = (X_new-x_prev);
+        double dy = (Y_new-y_prev);
         double dt = (time - time_prev)/3600.0; //convert to hours
         double D_add = Math.sqrt(dx*dx+dy*dy);
         double VX_new = dx / dt;
@@ -171,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Y = Y_new;
         VX = VX_new;
         VY = VY_new;
+        //But make sure to compute heading
         //Filter the signal
         double s = 0.5;
         V = s*v_new + (1-s)*v_prev;
@@ -190,39 +190,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         textViewTime.setText(messageTime);
         ///Latitude BOX
         TextView textViewLAT = findViewById(R.id.textViewLatitude);
-        String messageLAT = String.format("%.4f",latitude);
+        String messageLAT = String.format("%.5f",latitude);
         textViewLAT.setText(messageLAT);
         //Longitude BOX
         TextView textViewLON = findViewById(R.id.textViewLongitude);
-        String messageLON = String.format("%.4f",longitude);
+        String messageLON = String.format("%.5f",longitude);
         textViewLON.setText(messageLON);
         //Current X position
         TextView textViewX = findViewById(R.id.textViewX);
-        String messageX = String.format("%.4f",X);
+        String messageX = String.format("%.2f",X);
         textViewX.setText(messageX);
 	    //Current Y position
         TextView textViewY = findViewById(R.id.textViewY);
-        String messageY = String.format("%.4f",Y);
+        String messageY = String.format("%.2f",Y);
         textViewY.setText(messageY);
 	    //Current velocity X
         TextView textViewVX = findViewById(R.id.textViewVX);
-        String messageVX = String.format("%.4f",VX);
+        String messageVX = String.format("%.2f",VX);
         textViewVX.setText(messageVX);
 	    //Current velocity Y
         TextView textViewVY = findViewById(R.id.textViewVY);
-        String messageVY = String.format("%.4f",VY);
+        String messageVY = String.format("%.2f",VY);
         textViewVY.setText(messageVY);
 	    //Current velocity
         TextView textViewV = findViewById(R.id.textViewV);
-        String messageV = String.format("%.4f",V);
+        String messageV = String.format("%.2f",V);
         textViewV.setText(messageV);
         //Velocity Directly from GPS
         TextView textViewGPSV = findViewById(R.id.textViewGPSV);
-        String messageGPSV = String.format("%.4f",gps_speed);
+        String messageGPSV = String.format("%.2f",gps_speed);
         textViewGPSV.setText(messageGPSV);
 	    //Current Distance
         TextView textViewD = findViewById(R.id.textViewD);
-        String messageD = String.format("%.4f",D);
+        String messageD = String.format("%.2f",D);
         textViewD.setText(messageD);
     }
 
@@ -234,11 +234,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LATLONSET = true;
         ///Latitude BOX
         TextView textViewLATO = findViewById(R.id.textViewLatitudeOrigin);
-        String messageLATO = String.format("%.4f",latitude_origin);
+        String messageLATO = String.format("%.5f",latitude_origin);
         textViewLATO.setText(messageLATO);
         //Longitude BOX
         TextView textViewLONO = findViewById(R.id.textViewLongitudeOrigin);
-        String messageLONO = String.format("%.4f",longitude_origin);
+        String messageLONO = String.format("%.5f",longitude_origin);
         textViewLONO.setText(messageLONO);
         //Reset X,Y,VX,VY,V and D
         X = 0;
