@@ -38,10 +38,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public double y_prev = 0;
     public double VX = 0;
     public double VY = 0;
+    public double vx_prev = 0;
+    public double vy_prev = 0;
     public double V = 0;
-    public double v_prev = 0;
+    public double VX_display = 0;
+    public double VY_display = 0;
+    public double V_display = 0;
+    public double bearing_prev = 0;
+    public double CalcBearing = 0;
+    public double bearing = 0;
     public double D = 0;
     public boolean LATLONSET = false;
+    public double decayRate = 0;
     public double startTime = -99;
     //Create a handler to update the numbers
     public Handler handler = new Handler();
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 gps_speed = location.getSpeed()*2.23694; //convert from m/s to mph
+                bearing = location.getBearing();
             }
         };
         //Start the GPS
@@ -71,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Get the start time
         startTime = System.currentTimeMillis() / 1000.0;
         //Kick off the runnable function to run at a set loop interval
+
+        //Compute decay rate of velocity
+        double decayTime = 10; //seconds to decay
+        double Nps = 1000/LOOP_INTERVAL_MS; //Number of times per second the loop runs
+        double N = decayTime * Nps; //Number of times the loop needs to run before we get to 2%
+        decayRate = Math.pow(0.02,1.0/N);
+
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -80,8 +96,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (LATLONSET) {
                     Compute();
                 }
-                //No matter what update the numbers you've got.
+                //No matter what display the numbers you've got.
                 DisplayNumbers();
+                //And run the velocity decay rate
+                DecayVelocity();
                 //Then execute the run() function again after the loop interval
                 handler.postDelayed(this,LOOP_INTERVAL_MS);
             }
@@ -101,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
+        //This is here for the accelerometer which we're not using rn/
     }
 
     @Override
@@ -142,6 +161,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public void DecayVelocity() {
+        //This routine will decay the velocity when you're standing still and GPS hasn't changed
+        VX_display = decayRate * VX_display;
+        VY_display = decayRate * VY_display;
+        V_display = Math.sqrt(VX_display * VX_display + VY_display * VY_display);
+    }
+
     public void Compute() {
         //First convert Latitude and longitude to X and Y
         double NM2MI = 1.15078F;
@@ -151,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         double dx = (X_new-x_prev);
         double dy = (Y_new-y_prev);
         double dt = (time - time_prev)/3600.0; //convert to hours
-        double D_add = Math.sqrt(dx*dx+dy*dy);
         double VX_new = dx / dt;
         double VY_new = dy / dt;
         //Compute the total velocity
@@ -162,25 +187,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             return;
         }
         //Also just return if you haven't moved enough
+        double D_add = Math.sqrt(dx*dx+dy*dy);
         if (D_add < 0.01) {
             return;
         }
-        //Otherwise reset the values
+        //Otherwise compute everything we need to compute
+        //First set x_new and y_new to the appropriate x,y vals
         X = X_new;
         Y = Y_new;
-        VX = VX_new;
-        VY = VY_new;
-        //But make sure to compute heading
-        //Filter the signal
-        double s = 0.5;
-        V = s*v_new + (1-s)*v_prev;
+        //Filter the VX and VY velocities
+        double s = 0.9;
+        VX = s*VX_new + (1-s)*vx_prev;
+        VY = s*VY_new + (1-s)*vy_prev;
+        //Recompute velocity with new filtered vals
+        V = Math.sqrt(VX*VX + VY*VY);
+        //Reset the display values
+        V_display = V;
+        VX_display = VX;
+        VY_display = VY;
+        //Compute Heading
+        double bearing_new = Math.atan2(dy,dx)*180.0/Math.PI; //Bearing in degrees
+        //And filter that too
+        CalcBearing = s*bearing_new + (1-s)*bearing_prev;
         //Compute total distance traveled
         D += D_add;
         //Then reset prev values
         x_prev = X;
         y_prev = Y;
         time_prev = time;
-        v_prev = V;
+        vx_prev = VX;
+        vy_prev = VY;
+        bearing_prev = CalcBearing;
     }
 
     public void DisplayNumbers() {
@@ -206,15 +243,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         textViewY.setText(messageY);
 	    //Current velocity X
         TextView textViewVX = findViewById(R.id.textViewVX);
-        String messageVX = String.format("%.2f",VX);
+        String messageVX = String.format("%.2f",VX_display);
         textViewVX.setText(messageVX);
 	    //Current velocity Y
         TextView textViewVY = findViewById(R.id.textViewVY);
-        String messageVY = String.format("%.2f",VY);
+        String messageVY = String.format("%.2f",VY_display);
         textViewVY.setText(messageVY);
 	    //Current velocity
         TextView textViewV = findViewById(R.id.textViewV);
-        String messageV = String.format("%.2f",V);
+        String messageV = String.format("%.2f",V_display);
         textViewV.setText(messageV);
         //Velocity Directly from GPS
         TextView textViewGPSV = findViewById(R.id.textViewGPSV);
@@ -224,6 +261,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextView textViewD = findViewById(R.id.textViewD);
         String messageD = String.format("%.2f",D);
         textViewD.setText(messageD);
+        //Calculated Bearing
+        TextView textViewCalcB = findViewById(R.id.textViewCalcB);
+        String messageCalcB = String.format("%.2f",CalcBearing);
+        textViewCalcB.setText(messageCalcB);
+        //Calculated Bearing from GPS
+        TextView textViewB = findViewById(R.id.textViewB);
+        String messageB = String.format("%.2f",bearing);
+        textViewB.setText(messageB);
     }
 
     //Called when user hits the set origin button
@@ -243,13 +288,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Reset X,Y,VX,VY,V and D
         X = 0;
         x_prev = 0;
+        vx_prev = 0;
         Y = 0;
         y_prev = 0;
+        vy_prev = 0;
         VX = 0;
         VY = 0;
         V = 0;
-        v_prev = 0;
         D = 0;
+        CalcBearing = 0;
         startTime = System.currentTimeMillis()/1000.0;
     }
 }

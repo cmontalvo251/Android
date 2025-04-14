@@ -14,4 +14,6 @@
     <string name="CurrentV">Calculated Velocity (mph)</string>
     <string name="Position">Calculated Distance Traveled (mi)</string>
     <string name="GPSSpeed">Speed from GPS (mph)</string>
+    <string name="CalcBearing">Calculated Bearing (deg)</string>
+    <string name="Bearing">Bearing from GPS (deg)</string>
 </resources>
