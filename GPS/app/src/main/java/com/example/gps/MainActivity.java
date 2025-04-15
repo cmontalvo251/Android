@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 try {
                     Start(MainActivity.this);
                 } catch (IOException e) {
+                    PrintMessage("Catch: Start");
                     throw new RuntimeException(e);
                 }
             }
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     try {
                         Compute();
                     } catch (IOException e) {
+                        PrintMessage("Catch: Compute");
                         throw new RuntimeException(e);
                     }
                 }
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             try {
                 fos.close();
             } catch (IOException e) {
+                PrintMessage("Catch: onDestroy");
                 throw new RuntimeException(e);
             }
         }
@@ -181,6 +184,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         //Nothing for the accelerometer. This is here because of archaic code
+    }
+
+    public void PrintMessage(String message) {
+        TextView textViewMessage = findViewById(R.id.textViewMESSAGE);
+        textViewMessage.setText(message);
     }
 
     public void startGPS() {
@@ -257,14 +265,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         V_display = V;
         VX_display = VX;
         VY_display = VY;
-        //Compute Heading (If you want to filter heading you need to filter dy and dx
+        //Compute Heading (If you want to filter heading you need to filter cos(bearing) and sin(bearing)
+        //and then recompute bearing by doing atan2(sin(bearing),cos(bearing))
         //But I don't want to deal with that b/c I think this is fine
         //We're basically filtering anyway by only taking new data points when the GPS changes
         //and when the distance changes by 0.01
         CalcBearing = Math.atan2(dy, dx) * 180.0 / Math.PI; //Bearing in degrees
         //The atan2 function wraps at -180 but standard bearing needs to wrap at 360.
+        //So if it's -180 we had 360 to it so it's 180 and if it's -1 it'll be 359.
         if (CalcBearing < 0) {
-            CalcBearing += 180.0;
+            CalcBearing += 360.0;
         }
         //Compute total distance traveled
         D += D_add;
@@ -373,9 +383,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int num = 0;
         boolean filenotfound = true;
         File file;
+        String fileName = "log-1.txt";
         while (filenotfound) {
             //Create a file name with the number in the filename
-            String fileName = "log" + num + ".txt";
+            fileName = "log" + num + ".txt";
             file = new File(context.getFilesDir(), fileName);
             //check to see if the file exists
             if (!file.exists()) {
@@ -391,6 +402,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 num += 1;
             } // else file exists
         } //end while loop
+        //Files log to /data/user/0/com.example.gps/files/log#.txt
+        PrintMessage("Logging to: " + context.getFilesDir().getAbsolutePath() + "/" + fileName);
     } // end start function
 
 } // end main activity
