@@ -1,10 +1,7 @@
 package com.example.gps;
-
 import java.lang.Math;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -18,7 +15,6 @@ import android.os.Handler;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
@@ -49,12 +45,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public double bearing = 0;
     public double D = 0;
     public boolean LATLONSET = false;
-    public double decayRate = 0;
+    //public double decayRate = 0;
     public double startTime = -99;
+    public double lastTime = 0;
+    public double decayTime = 1; //only decay the velocity once a second
+    public double nextTime = decayTime;
     //Create a handler to update the numbers
     public Handler handler = new Handler();
     public Runnable runnable;
-    public static final int LOOP_INTERVAL_MS = 100; // 100 ms = 10 Hz
+    public static final int LOOP_INTERVAL_MS = 100; // 100 ms = 10 Hz //How fast we compute
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 longitude = location.getLongitude();
                 gps_speed = location.getSpeed()*2.23694; //convert from m/s to mph
                 bearing = location.getBearing();
+                //Grab the time the location changed
+                lastTime = time;
+                //Also reset nextTime
+                nextTime = decayTime;
             }
         };
         //Start the GPS
@@ -81,11 +84,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startTime = System.currentTimeMillis() / 1000.0;
         //Kick off the runnable function to run at a set loop interval
 
-        //Compute decay rate of velocity
-        double decayTime = 10; //seconds to decay
-        double Nps = 1000/LOOP_INTERVAL_MS; //Number of times per second the loop runs
-        double N = decayTime * Nps; //Number of times the loop needs to run before we get to 2%
-        decayRate = Math.pow(0.02,1.0/N);
+        //Compute decay rate of velocity (not used anymore)
+        //double decayTime = 10; //seconds to decay
+        //double Nps = 1000/LOOP_INTERVAL_MS; //Number of times per second the loop runs
+        //double N = decayTime * Nps; //Number of times the loop needs to run before we get to 2%
+        //decayRate = Math.pow(0.02,1.0/N);
 
         runnable = new Runnable() {
             @Override
@@ -163,9 +166,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void DecayVelocity() {
         //This routine will decay the velocity when you're standing still and GPS hasn't changed
-        VX_display = decayRate * VX_display;
-        VY_display = decayRate * VY_display;
-        V_display = Math.sqrt(VX_display * VX_display + VY_display * VY_display);
+        //First compute the maximum velocity that the system could be
+        double dt = time - lastTime; //Current time - the last time we updated GPS
+        //But make sure we don't get a divide by zero
+        //Also only do this at a prescribed interval
+        if (dt > nextTime) {
+            //Increment nexttime so this only runs on the correct interval
+            nextTime += decayTime;
+            //convert dt to hours
+            dt /= 3600;
+            double VMAX = 0.01/dt; //the maximum mph you could be going without GPS changing (0.01 miles per dt hours)
+            if (V_display > VMAX) {
+                double ratio = VMAX / V_display;
+                V_display *= ratio;
+                VX_display *= ratio;
+                VY_display *= ratio;
+            }
+        }
     }
 
     public void Compute() {
@@ -205,10 +222,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         V_display = V;
         VX_display = VX;
         VY_display = VY;
-        //Compute Heading
-        double bearing_new = Math.atan2(dy,dx)*180.0/Math.PI; //Bearing in degrees
-        //And filter that too
-        CalcBearing = s*bearing_new + (1-s)*bearing_prev;
+        //Compute Heading (If you want to filter heading you need to filter dy and dx
+        //But I don't want to deal with that b/c I think this is fine
+        //We're basically filtering anyway by only taking new data points when the GPS changes
+        //and when the distance changes by 0.01
+        CalcBearing = Math.atan2(dy,dx)*180.0/Math.PI; //Bearing in degrees
+        //The atan2 function wraps at -180 but standard bearing needs to wrap at 360.
+        if (CalcBearing < 0) {
+            CalcBearing += 180.0;
+        }
         //Compute total distance traveled
         D += D_add;
         //Then reset prev values
