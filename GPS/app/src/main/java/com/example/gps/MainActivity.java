@@ -15,6 +15,10 @@ import android.os.Handler;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.Button;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
@@ -54,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public Handler handler = new Handler();
     public Runnable runnable;
     public static final int LOOP_INTERVAL_MS = 100; // 100 ms = 10 Hz //How fast we compute
+    //Variables for writing to a file
+    public boolean FILEOPEN = false;
+    public FileOutputStream fos;
+    private Button startButton;
+    public double LogRate = 0.2; //log ever LogRate seconds
+    public double nextLog = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                gps_speed = location.getSpeed()*2.23694; //convert from m/s to mph
+                gps_speed = location.getSpeed() * 2.23694; //convert from m/s to mph
                 bearing = location.getBearing();
                 //Grab the time the location changed
                 lastTime = time;
@@ -83,6 +93,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Get the start time
         startTime = System.currentTimeMillis() / 1000.0;
         //Kick off the runnable function to run at a set loop interval
+
+        //Create the Start Button function which resets all variables and handles file management
+        startButton = findViewById(R.id.button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Start(MainActivity.this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         //Compute decay rate of velocity (not used anymore)
         //double decayTime = 10; //seconds to decay
@@ -97,14 +120,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 time = System.currentTimeMillis() / 1000.0 - startTime;
                 //If LATLON origin has been set, start computing
                 if (LATLONSET) {
-                    Compute();
+                    try {
+                        Compute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 //No matter what display the numbers you've got.
                 DisplayNumbers();
                 //And run the velocity decay rate
                 DecayVelocity();
                 //Then execute the run() function again after the loop interval
-                handler.postDelayed(this,LOOP_INTERVAL_MS);
+                handler.postDelayed(this, LOOP_INTERVAL_MS);
             }
         };
         //Don't forget to actually start the loop
@@ -114,9 +141,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //Make sure you kill the runnable on destroy
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         // Stop the loop when the activity is destroyed
         handler.removeCallbacks(runnable);
+        //And close the file is a file is open
+        if (FILEOPEN) {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -145,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-       //Nothing for the accelerometer. This is here because of archaic code
+        //Nothing for the accelerometer. This is here because of archaic code
     }
 
     public void startGPS() {
@@ -175,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             nextTime += decayTime;
             //convert dt to hours
             dt /= 3600;
-            double VMAX = 0.01/dt; //the maximum mph you could be going without GPS changing (0.01 miles per dt hours)
+            double VMAX = 0.01 / dt; //the maximum mph you could be going without GPS changing (0.01 miles per dt hours)
             if (V_display > VMAX) {
                 double ratio = VMAX / V_display;
                 V_display *= ratio;
@@ -185,26 +220,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    public void Compute() {
+    public void Compute() throws IOException {
         //First convert Latitude and longitude to X and Y
         double NM2MI = 1.15078F;
-        double X_new = (latitude - latitude_origin)*60*NM2MI; //#%%//North direction - Xf , miles
-        double Y_new = (longitude - longitude_origin)*60*NM2MI*Math.cos(latitude_origin*Math.PI/180.0); //#%%//East direction - Yf, miles
+        double X_new = (latitude - latitude_origin) * 60 * NM2MI; //#%%//North direction - Xf , miles
+        double Y_new = (longitude - longitude_origin) * 60 * NM2MI * Math.cos(latitude_origin * Math.PI / 180.0); //#%%//East direction - Yf, miles
         //Then compute velocity in the X and Y directions
-        double dx = (X_new-x_prev);
-        double dy = (Y_new-y_prev);
-        double dt = (time - time_prev)/3600.0; //convert to hours
+        double dx = (X_new - x_prev);
+        double dy = (Y_new - y_prev);
+        double dt = (time - time_prev) / 3600.0; //convert to hours
         double VX_new = dx / dt;
         double VY_new = dy / dt;
         //Compute the total velocity
-        double v_new = Math.sqrt(VX_new*VX_new + VY_new*VY_new);
+        double v_new = Math.sqrt(VX_new * VX_new + VY_new * VY_new);
         //Throw out velocities that are ridiculous
         if (v_new > 200) {
             //My car won't even do 200 mph
             return;
         }
         //Also just return if you haven't moved enough
-        double D_add = Math.sqrt(dx*dx+dy*dy);
+        double D_add = Math.sqrt(dx * dx + dy * dy);
         if (D_add < 0.01) {
             return;
         }
@@ -214,10 +249,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Y = Y_new;
         //Filter the VX and VY velocities
         double s = 0.9;
-        VX = s*VX_new + (1-s)*vx_prev;
-        VY = s*VY_new + (1-s)*vy_prev;
+        VX = s * VX_new + (1 - s) * vx_prev;
+        VY = s * VY_new + (1 - s) * vy_prev;
         //Recompute velocity with new filtered vals
-        V = Math.sqrt(VX*VX + VY*VY);
+        V = Math.sqrt(VX * VX + VY * VY);
         //Reset the display values
         V_display = V;
         VX_display = VX;
@@ -226,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //But I don't want to deal with that b/c I think this is fine
         //We're basically filtering anyway by only taking new data points when the GPS changes
         //and when the distance changes by 0.01
-        CalcBearing = Math.atan2(dy,dx)*180.0/Math.PI; //Bearing in degrees
+        CalcBearing = Math.atan2(dy, dx) * 180.0 / Math.PI; //Bearing in degrees
         //The atan2 function wraps at -180 but standard bearing needs to wrap at 360.
         if (CalcBearing < 0) {
             CalcBearing += 180.0;
@@ -240,74 +275,81 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         vx_prev = VX;
         vy_prev = VY;
         bearing_prev = CalcBearing;
+        //We also want to output to a file
+        if (time > nextLog) {
+            String line = time + "," + latitude + "," + longitude + "," + latitude_origin + "," + longitude_origin + "," + X + "," + Y + "," + D + "," + VX_display + "," + VY_display + "," + V_display + "," + gps_speed + "," + CalcBearing + "," + bearing;
+            fos.write((line + "\n").getBytes());
+            nextLog += LogRate;
+        }
     }
 
     public void DisplayNumbers() {
         //Time BOX
         TextView textViewTime = findViewById(R.id.textViewTime);
-        String messageTime = String.format("%.2f",time);
+        String messageTime = String.format("%.2f", time);
         textViewTime.setText(messageTime);
         ///Latitude BOX
         TextView textViewLAT = findViewById(R.id.textViewLatitude);
-        String messageLAT = String.format("%.5f",latitude);
+        String messageLAT = String.format("%.5f", latitude);
         textViewLAT.setText(messageLAT);
         //Longitude BOX
         TextView textViewLON = findViewById(R.id.textViewLongitude);
-        String messageLON = String.format("%.5f",longitude);
+        String messageLON = String.format("%.5f", longitude);
         textViewLON.setText(messageLON);
         //Current X position
         TextView textViewX = findViewById(R.id.textViewX);
-        String messageX = String.format("%.2f",X);
+        String messageX = String.format("%.2f", X);
         textViewX.setText(messageX);
-	    //Current Y position
+        //Current Y position
         TextView textViewY = findViewById(R.id.textViewY);
-        String messageY = String.format("%.2f",Y);
+        String messageY = String.format("%.2f", Y);
         textViewY.setText(messageY);
-	    //Current velocity X
+        //Current velocity X
         TextView textViewVX = findViewById(R.id.textViewVX);
-        String messageVX = String.format("%.2f",VX_display);
+        String messageVX = String.format("%.2f", VX_display);
         textViewVX.setText(messageVX);
-	    //Current velocity Y
+        //Current velocity Y
         TextView textViewVY = findViewById(R.id.textViewVY);
-        String messageVY = String.format("%.2f",VY_display);
+        String messageVY = String.format("%.2f", VY_display);
         textViewVY.setText(messageVY);
-	    //Current velocity
+        //Current velocity
         TextView textViewV = findViewById(R.id.textViewV);
-        String messageV = String.format("%.2f",V_display);
+        String messageV = String.format("%.2f", V_display);
         textViewV.setText(messageV);
         //Velocity Directly from GPS
         TextView textViewGPSV = findViewById(R.id.textViewGPSV);
-        String messageGPSV = String.format("%.2f",gps_speed);
+        String messageGPSV = String.format("%.2f", gps_speed);
         textViewGPSV.setText(messageGPSV);
-	    //Current Distance
+        //Current Distance
         TextView textViewD = findViewById(R.id.textViewD);
-        String messageD = String.format("%.2f",D);
+        String messageD = String.format("%.2f", D);
         textViewD.setText(messageD);
         //Calculated Bearing
         TextView textViewCalcB = findViewById(R.id.textViewCalcB);
-        String messageCalcB = String.format("%.2f",CalcBearing);
+        String messageCalcB = String.format("%.2f", CalcBearing);
         textViewCalcB.setText(messageCalcB);
         //Calculated Bearing from GPS
         TextView textViewB = findViewById(R.id.textViewB);
-        String messageB = String.format("%.2f",bearing);
+        String messageB = String.format("%.2f", bearing);
         textViewB.setText(messageB);
     }
 
-    //Called when user hits the set origin button
-    public void Reset(View view) {
+    //Called when user hits the Start button
+    public void Start(Context context) throws IOException {
+        //First set the latitude and longitude
         latitude_origin = latitude;
         longitude_origin = longitude;
         //LATLONSET variable
         LATLONSET = true;
         ///Latitude BOX
         TextView textViewLATO = findViewById(R.id.textViewLatitudeOrigin);
-        String messageLATO = String.format("%.5f",latitude_origin);
+        String messageLATO = String.format("%.5f", latitude_origin);
         textViewLATO.setText(messageLATO);
         //Longitude BOX
         TextView textViewLONO = findViewById(R.id.textViewLongitudeOrigin);
-        String messageLONO = String.format("%.5f",longitude_origin);
+        String messageLONO = String.format("%.5f", longitude_origin);
         textViewLONO.setText(messageLONO);
-        //Reset X,Y,VX,VY,V and D
+        //Then Reset X,Y,VX,VY,V and D
         X = 0;
         x_prev = 0;
         vx_prev = 0;
@@ -319,6 +361,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         V = 0;
         D = 0;
         CalcBearing = 0;
-        startTime = System.currentTimeMillis()/1000.0;
-    }
-}
+        nextLog = 0;
+        startTime = System.currentTimeMillis() / 1000.0;
+        //Now we handle the file management stuff
+        //First we need to check and see if a file is open
+        if (FILEOPEN) {
+            fos.close();
+        }
+        //Now we know the file is close so
+        // we need to loop through our directory until we find a file we need
+        int num = 0;
+        boolean filenotfound = true;
+        File file;
+        while (filenotfound) {
+            //Create a file name with the number in the filename
+            String fileName = "log" + num + ".txt";
+            file = new File(context.getFilesDir(), fileName);
+            //check to see if the file exists
+            if (!file.exists()) {
+                //If it doesn't exist we create a new file
+                file.createNewFile();
+                //and set filenotfound to false so we break out of this loop
+                filenotfound = false;
+                // and we can create the file stream
+                fos = new FileOutputStream(file);
+                FILEOPEN = true;
+            } else {
+                //Otherwise we increment by 1 and try again
+                num += 1;
+            } // else file exists
+        } //end while loop
+    } // end start function
+
+} // end main activity

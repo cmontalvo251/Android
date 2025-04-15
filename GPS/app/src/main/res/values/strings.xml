@@ -16,4 +16,5 @@
     <string name="GPSSpeed">Speed from GPS (mph)</string>
     <string name="CalcBearing">Calculated Bearing (deg)</string>
     <string name="Bearing">Bearing from GPS (deg)</string>
+    <string name="Start">Start</string>
 </resources>
