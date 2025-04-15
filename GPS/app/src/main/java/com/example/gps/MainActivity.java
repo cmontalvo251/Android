@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public boolean FILEOPEN = false;
     public FileOutputStream fos;
     private Button startButton;
-    public double LogRate = 0.2; //log ever LogRate seconds
+    public double LogRate = 1.0; //log every LogRate seconds
     public double nextLog = 0;
 
     @Override
@@ -121,10 +121,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 time = System.currentTimeMillis() / 1000.0 - startTime;
                 //If LATLON origin has been set, start computing
                 if (LATLONSET) {
+                    Compute();
                     try {
-                        Compute();
+                        //We also want to output to a file
+                        if (time > nextLog) {
+                            String line = time + "," + latitude + "," + longitude + "," + latitude_origin + "," + longitude_origin + "," + X + "," + Y + "," + D + "," + VX_display + "," + VY_display + "," + V_display + "," + gps_speed + "," + CalcBearing + "," + bearing;
+                            fos.write((line + "\n").getBytes());
+                            nextLog += LogRate;
+                        }
                     } catch (IOException e) {
-                        PrintMessage("Catch: Compute");
+                        PrintMessage("Catch: Logging to a File");
                         throw new RuntimeException(e);
                     }
                 }
@@ -228,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    public void Compute() throws IOException {
+    public void Compute() {
         //First convert Latitude and longitude to X and Y
         double NM2MI = 1.15078F;
         double X_new = (latitude - latitude_origin) * 60 * NM2MI; //#%%//North direction - Xf , miles
@@ -285,12 +291,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         vx_prev = VX;
         vy_prev = VY;
         bearing_prev = CalcBearing;
-        //We also want to output to a file
-        if (time > nextLog) {
-            String line = time + "," + latitude + "," + longitude + "," + latitude_origin + "," + longitude_origin + "," + X + "," + Y + "," + D + "," + VX_display + "," + VY_display + "," + V_display + "," + gps_speed + "," + CalcBearing + "," + bearing;
-            fos.write((line + "\n").getBytes());
-            nextLog += LogRate;
-        }
     }
 
     public void DisplayNumbers() {
@@ -387,7 +387,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         while (filenotfound) {
             //Create a file name with the number in the filename
             fileName = "log" + num + ".txt";
-            file = new File(context.getFilesDir(), fileName);
+            //file = new File(context.getFilesDir(), fileName);
+            //file = new File(context.getExternalFilesDir(null),fileName);
+            file = new File("/storage/emulated/0/Documents/",fileName);
             //check to see if the file exists
             if (!file.exists()) {
                 //If it doesn't exist we create a new file
@@ -403,7 +405,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             } // else file exists
         } //end while loop
         //Files log to /data/user/0/com.example.gps/files/log#.txt
-        PrintMessage("Logging to: " + context.getFilesDir().getAbsolutePath() + "/" + fileName);
+        //In android studio it's
+        // /data/data/com.example.gps/files/log#.txt
+        //PrintMessage("Logging to: " + context.getFilesDir().getAbsolutePath() + "/" + fileName);
+        //This one is /storage/emulated/0/Android/data/com.example.gps/files/log#.txt
+        //PrintMessage("Logging to: " + context.getExternalFilesDir(null) + "/" + fileName);
+        PrintMessage("Logging to: /storage/emulated/0/Documents/" + fileName);
     } // end start function
 
 } // end main activity
