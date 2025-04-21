@@ -17,4 +17,5 @@
     <string name="CalcBearing">Calculated Bearing (deg)</string>
     <string name="Bearing">Bearing from GPS (deg)</string>
     <string name="Start">Start</string>
+    <string name="elevation">Elevation (ft)</string>
 </resources>

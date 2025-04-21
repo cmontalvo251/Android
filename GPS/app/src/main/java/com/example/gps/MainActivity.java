@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private LocationListener locationListener;
     public double latitude = 0;
     public double longitude = 0;
+
+    public double elevation = 0;
     public double latitude_origin = -99;
     public double longitude_origin = -99;
     public double gps_speed = 0;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
+                elevation = location.getAltitude()*3.28;
                 gps_speed = location.getSpeed() * 2.23694; //convert from m/s to mph
                 bearing = location.getBearing();
                 //Grab the time the location changed
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     try {
                         //We also want to output to a file
                         if (time > nextLog) {
-                            String line = time + "," + latitude + "," + longitude + "," + latitude_origin + "," + longitude_origin + "," + X + "," + Y + "," + D + "," + VX_display + "," + VY_display + "," + V_display + "," + gps_speed + "," + CalcBearing + "," + bearing;
+                            String line = time + "," + latitude + "," + longitude + "," + latitude_origin + "," + longitude_origin + "," + X + "," + Y + "," + D + "," + VX_display + "," + VY_display + "," + V_display + "," + gps_speed + "," + CalcBearing + "," + bearing + "," + elevation;
                             fos.write((line + "\n").getBytes());
                             nextLog += LogRate;
                         }
@@ -342,6 +345,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextView textViewB = findViewById(R.id.textViewB);
         String messageB = String.format("%.2f", bearing);
         textViewB.setText(messageB);
+        //Elevation from GPS (ft)
+        TextView textViewELE = findViewById(R.id.textViewELE);
+        String messageELE = String.format("%.2f", elevation);
+        textViewELE.setText(messageELE);
     }
 
     //Called when user hits the Start button
