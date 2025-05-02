@@ -62,8 +62,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static final int LOOP_INTERVAL_MS = 100; // 100 ms = 10 Hz //How fast we compute
     //Variables for writing to a file
     public boolean FILEOPEN = false;
+    public boolean RAWDATA = true;
     public FileOutputStream fos;
     private Button startButton;
+    private Button swapButton;
     public double LogRate = 1.0; //log every LogRate seconds
     public double nextLog = 0;
 
@@ -110,6 +112,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         });
+        //Create the Swap Button
+        swapButton = findViewById(R.id.swap_button);
+        swapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Swap(MainActivity.this);
+            }
+        });
+        //We need to then run the Swap Function once to set everything properly
+        Swap(MainActivity.this);
+
 
         //Compute decay rate of velocity (not used anymore)
         //double decayTime = 10; //seconds to decay
@@ -296,11 +309,83 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         bearing_prev = CalcBearing;
     }
 
+    public void Swap(Context context) {
+        RAWDATA = !RAWDATA;
+        //Update the text boxes
+        if (RAWDATA) {
+            TextView textViewCALCX = findViewById(R.id.textViewCALCX);
+            String messageCALCX = "Calculated X Position (ft)";
+            textViewCALCX.setText(messageCALCX);
+            TextView textViewCALCY = findViewById(R.id.textViewCALCY);
+            String messageCALCY = "Calculated Y Position (ft)";
+            textViewCALCY.setText(messageCALCY);
+            TextView textViewCALCVX = findViewById(R.id.textViewCALCVX);
+            String messageCALCVX = "Calculated Velocity X (mph)";
+            textViewCALCVX.setText(messageCALCVX);
+            TextView textViewCALCVY = findViewById(R.id.textViewCALCVY);
+            String messageCALCVY = "Calculated Velocity Y (mph)";
+            textViewCALCVY.setText(messageCALCVY);
+            TextView textViewCALCV = findViewById(R.id.textViewCALCV);
+            String messageCALCV = "Calculated Velocity (mph)";
+            textViewCALCV.setText(messageCALCV);
+            TextView textViewGPSSPEED = findViewById(R.id.textViewGPSSPEED);
+            String messageGPSSPEED = "Speed from GPS (mph)";
+            textViewGPSSPEED.setText(messageGPSSPEED);
+            TextView textViewDISTANCE = findViewById(R.id.textViewDISTANCE);
+            String messageDISTANCE = "Calculated Distance Traveled (mi)";
+            textViewDISTANCE.setText(messageDISTANCE);
+            TextView textViewCALCBEARING = findViewById(R.id.textViewCALCBEARING);
+            String messageCALCBEARING = "Calculated Bearing (deg)";
+            textViewCALCBEARING.setText(messageCALCBEARING);
+            TextView textViewBEARING = findViewById(R.id.textViewBEARING);
+            String messageBEARING = "Bearing (deg)";
+            textViewBEARING.setText(messageBEARING);
+            TextView textViewELEVATION = findViewById(R.id.textViewELEVATION);
+            String messageELEVATION = "Elevation (ft)";
+            textViewELEVATION.setText(messageELEVATION);
+        } else {
+            //The text boxes change
+            TextView textViewCALCX = findViewById(R.id.textViewCALCX);
+            String messageCALCX = "Speed from GPS (mph)";
+            textViewCALCX.setText(messageCALCX);
+            TextView textViewCALCY = findViewById(R.id.textViewCALCY);
+            String messageCALCY = "Bearing (deg)";
+            textViewCALCY.setText(messageCALCY);
+            TextView textViewCALCVX = findViewById(R.id.textViewCALCVX);
+            String messageCALCVX = "Calculated Distance Traveled (mi)";
+            textViewCALCVX.setText(messageCALCVX);
+            TextView textViewCALCVY = findViewById(R.id.textViewCALCVY);
+            String messageCALCVY = "Elevation (ft)";
+            textViewCALCVY.setText(messageCALCVY);
+            //Then the rest are blank
+            TextView textViewCALCV = findViewById(R.id.textViewCALCV);
+            String messageCALCV = "";
+            textViewCALCV.setText(messageCALCV);
+            TextView textViewGPSSPEED = findViewById(R.id.textViewGPSSPEED);
+            String messageGPSSPEED = "";
+            textViewGPSSPEED.setText(messageGPSSPEED);
+            TextView textViewDISTANCE = findViewById(R.id.textViewDISTANCE);
+            String messageDISTANCE = "";
+            textViewDISTANCE.setText(messageDISTANCE);
+            TextView textViewCALCBEARING = findViewById(R.id.textViewCALCBEARING);
+            String messageCALCBEARING = "";
+            textViewCALCBEARING.setText(messageCALCBEARING);
+            TextView textViewBEARING = findViewById(R.id.textViewBEARING);
+            String messageBEARING = "";
+            textViewBEARING.setText(messageBEARING);
+            TextView textViewELEVATION = findViewById(R.id.textViewELEVATION);
+            String messageELEVATION = "";
+            textViewELEVATION.setText(messageELEVATION);
+        }
+    }
+
     public void DisplayNumbers() {
+        //No matter what I need to see the time
         //Time BOX
         TextView textViewTime = findViewById(R.id.textViewTime);
         String messageTime = String.format("%.2f", time);
         textViewTime.setText(messageTime);
+        //I also want to see the Lat/Lon coordinates just for fun
         ///Latitude BOX
         TextView textViewLAT = findViewById(R.id.textViewLatitude);
         String messageLAT = String.format("%.5f", latitude);
@@ -309,46 +394,93 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextView textViewLON = findViewById(R.id.textViewLongitude);
         String messageLON = String.format("%.5f", longitude);
         textViewLON.setText(messageLON);
-        //Current X position
-        TextView textViewX = findViewById(R.id.textViewX);
-        String messageX = String.format("%.2f", X);
-        textViewX.setText(messageX);
-        //Current Y position
-        TextView textViewY = findViewById(R.id.textViewY);
-        String messageY = String.format("%.2f", Y);
-        textViewY.setText(messageY);
-        //Current velocity X
-        TextView textViewVX = findViewById(R.id.textViewVX);
-        String messageVX = String.format("%.2f", VX_display);
-        textViewVX.setText(messageVX);
-        //Current velocity Y
-        TextView textViewVY = findViewById(R.id.textViewVY);
-        String messageVY = String.format("%.2f", VY_display);
-        textViewVY.setText(messageVY);
-        //Current velocity
-        TextView textViewV = findViewById(R.id.textViewV);
-        String messageV = String.format("%.2f", V_display);
-        textViewV.setText(messageV);
-        //Velocity Directly from GPS
-        TextView textViewGPSV = findViewById(R.id.textViewGPSV);
-        String messageGPSV = String.format("%.2f", gps_speed);
-        textViewGPSV.setText(messageGPSV);
-        //Current Distance
-        TextView textViewD = findViewById(R.id.textViewD);
-        String messageD = String.format("%.2f", D);
-        textViewD.setText(messageD);
-        //Calculated Bearing
-        TextView textViewCalcB = findViewById(R.id.textViewCalcB);
-        String messageCalcB = String.format("%.2f", CalcBearing);
-        textViewCalcB.setText(messageCalcB);
-        //Calculated Bearing from GPS
-        TextView textViewB = findViewById(R.id.textViewB);
-        String messageB = String.format("%.2f", bearing);
-        textViewB.setText(messageB);
-        //Elevation from GPS (ft)
-        TextView textViewELE = findViewById(R.id.textViewELE);
-        String messageELE = String.format("%.2f", elevation);
-        textViewELE.setText(messageELE);
+        //I want to see all the raw data
+        if (RAWDATA) {
+            //This includes the current x,y,vx,vy and computed velocity
+            //Current X position
+            TextView textViewX = findViewById(R.id.textViewX);
+            String messageX = String.format("%.2f", X);
+            textViewX.setText(messageX);
+            //Current Y position
+            TextView textViewY = findViewById(R.id.textViewY);
+            String messageY = String.format("%.2f", Y);
+            textViewY.setText(messageY);
+            //Current velocity X
+            TextView textViewVX = findViewById(R.id.textViewVX);
+            String messageVX = String.format("%.2f", VX_display);
+            textViewVX.setText(messageVX);
+            //Current velocity Y
+            TextView textViewVY = findViewById(R.id.textViewVY);
+            String messageVY = String.format("%.2f", VY_display);
+            textViewVY.setText(messageVY);
+            //Current velocity
+            TextView textViewV = findViewById(R.id.textViewV);
+            String messageV = String.format("%.2f", V_display);
+            textViewV.setText(messageV);
+            //Velocity Directly from GPS
+            TextView textViewGPSV = findViewById(R.id.textViewGPSV);
+            String messageGPSV = String.format("%.2f", gps_speed);
+            textViewGPSV.setText(messageGPSV);
+            //Current Distance
+            TextView textViewD = findViewById(R.id.textViewD);
+            String messageD = String.format("%.2f", D);
+            textViewD.setText(messageD);
+            //Calculated Bearing
+            TextView textViewCalcB = findViewById(R.id.textViewCalcB);
+            String messageCalcB = String.format("%.2f", CalcBearing);
+            textViewCalcB.setText(messageCalcB);
+            //Calculated Bearing from GPS
+            TextView textViewB = findViewById(R.id.textViewB);
+            String messageB = String.format("%.2f", bearing);
+            textViewB.setText(messageB);
+            //Elevation from GPS (ft)
+            TextView textViewELE = findViewById(R.id.textViewELE);
+            String messageELE = String.format("%.2f", elevation);
+            textViewELE.setText(messageELE);
+        } else {
+            //However if I don't want to see th raw data I just want to see the following:
+            //Velocity from GPS but it needs to be in the X block
+            TextView textViewX = findViewById(R.id.textViewX);
+            String messageX = String.format("%.2f", gps_speed);
+            textViewX.setText(messageX);
+            //Y - Bearing from GPS will be in the Y block
+            TextView textViewY = findViewById(R.id.textViewY);
+            String messageY = String.format("%.2f", bearing);
+            textViewY.setText(messageY);
+            //Then the current distance but I want that in the VX block
+            TextView textViewVX = findViewById(R.id.textViewVX);
+            String messageVX = String.format("%.2f", D);
+            textViewVX.setText(messageVX);
+            //VY - Elevation will go here
+            TextView textViewVY = findViewById(R.id.textViewVY);
+            String messageVY = String.format("%.2f", elevation);
+            textViewVY.setText(messageVY);
+            //Then the rest are blank
+            //Current velocity
+            TextView textViewV = findViewById(R.id.textViewV);
+            String messageV = "";
+            textViewV.setText(messageV);
+            //Velocity Directly from GPS
+            TextView textViewGPSV = findViewById(R.id.textViewGPSV);
+            String messageGPSV = "";
+            textViewGPSV.setText(messageGPSV);
+            //Current Distance
+            TextView textViewD = findViewById(R.id.textViewD);
+            String messageD = "";
+            textViewD.setText(messageD);
+            //Calculated Bearing
+            TextView textViewCalcB = findViewById(R.id.textViewCalcB);
+            String messageCalcB = "";
+            textViewCalcB.setText(messageCalcB);
+            //Calculated Bearing from GPS
+            TextView textViewB = findViewById(R.id.textViewB);
+            String messageB = "";
+            textViewB.setText(messageB);
+            //Elevation from GPS (ft)
+            TextView textViewELE = findViewById(R.id.textViewELE);
+            String messageELE = "";
+            textViewELE.setText(messageELE);
+        }
     }
 
     //Called when user hits the Start button
