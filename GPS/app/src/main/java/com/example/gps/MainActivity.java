@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //We need to then run the Swap Function once to set everything properly
         Swap(MainActivity.this);
 
-
         //Compute decay rate of velocity (not used anymore)
         //double decayTime = 10; //seconds to decay
         //double Nps = 1000/LOOP_INTERVAL_MS; //Number of times per second the loop runs
@@ -191,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Resume the Accelerometer
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         //Resume GPS
-        startGPS();
+        //startGPS();
     }
 
     @Override
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Pause the accelerometer
         sensorManager.unregisterListener(this);
         //Pause the GPS
-        locationManager.removeUpdates(locationListener);
+        //locationManager.removeUpdates(locationListener);
     }
 
     @Override
