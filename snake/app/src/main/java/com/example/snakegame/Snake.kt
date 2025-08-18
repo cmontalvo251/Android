@@ -14,9 +14,23 @@ class Snake {
         var restart = false;
         var numbodyParts = 1
 
+        //This checks to see if there is a possible move available
         fun possibleMove(): Boolean {
-            if (nextheadX < 0f || nextheadX > 650f || nextheadY < 0f || nextheadY > 650)
+            //First check and see if the head is at the boundary
+            if ((nextheadX < 0f || nextheadX > 650f || nextheadY < 0f || nextheadY > 650)) {
                 return false
+            }
+            //Next we need to check and see if the head has collided with the rest of the body
+            var head = true
+            for (i in bodyParts) {
+                if (!head) {
+                    if ((i[0] == nextheadX) && (i[1] == nextheadY)) {
+                        return false
+                    }
+                }
+                //Need to skip the head
+                head = false
+            }
             return true
         }
 
