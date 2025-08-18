@@ -88,24 +88,30 @@ class MainActivity : AppCompatActivity() {
 
         canvas.setOnTouchListener(object : OnSwipeTouchListener() {
             override fun onSwipeLeft() {
-                Snake.alive = true
+                if (!Snake.restart) {
+                    Snake.alive = true
+                }
                 if (Snake.direction != "right")
                     Snake.direction = "left"
             }
-
             override fun onSwipeRight() {
-                Snake.alive = true
+                if (!Snake.restart) {
+                    Snake.alive = true
+                }
                 if (Snake.direction != "left")
                     Snake.direction = "right"
             }
-
             override fun onSwipeTop() {
-                Snake.alive = true
+                if (!Snake.restart) {
+                    Snake.alive = true
+                }
                 if (Snake.direction != "up")
                     Snake.direction = "down"
             }
             override fun onSwipeBottom() {
-                Snake.alive = true
+                if (!Snake.restart) {
+                    Snake.alive = true
+                }
                 if (Snake.direction != "down")
                     Snake.direction = "up"
             }
@@ -116,49 +122,40 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 while (Snake.alive) {
+                    //Move the head but virtually
                     when (Snake.direction) {
                         "up" -> {
-                            // create new head position
-                            Snake.headY -= 50
-                            if (!Snake.possibleMove()) {
-                                Snake.alive = false
-                                Snake.reset()
-                            }
+                            Snake.nextheadY -= 50
                         }
                         "down" -> {
-                            // create new head position
-                            Snake.headY += 50
-                            if (!Snake.possibleMove()) {
-                                Snake.alive = false
-                                Snake.reset()
-                            }
+                            Snake.nextheadY += 50
                         }
                         "left" -> {
-                            // create new head position
-                            Snake.headX -= 50
-                            if (!Snake.possibleMove()) {
-                                Snake.alive = false
-                                Snake.reset()
-                            }
-
+                            Snake.nextheadX -= 50
                         }
                         "right" -> {
-                            // create new head position
-                            Snake.headX += 50
-                            if (!Snake.possibleMove()) {
-                                Snake.alive = false
-                                Snake.reset()
-                            }
+                            Snake.nextheadX += 50
                         }
+                    }
+                    if (!Snake.possibleMove()) {
+                        Snake.died()
+                    } else {
+                        Snake.headY = Snake.nextheadY
+                        Snake.headX = Snake.nextheadX
                     }
                     // convert head to body
                     Snake.bodyParts.add(arrayOf(Snake.headX, Snake.headY))
 
                     // delete tail if not eat
-                    if (Snake.headX == Food.posX && Snake.headY == Food.posY)
+                    if (Snake.headX == Food.posX && Snake.headY == Food.posY) {
                         Food.generate()
-                    else
-                        Snake.bodyParts.removeAt(0)
+                        //If we generate a new food item we need to add 1 to body parts
+                        Snake.numbodyParts += 1
+                    } else {
+                        if (Snake.alive) {
+                            Snake.bodyParts.removeAt(0)
+                        }
+                    }
 
                     //game speed in millisecond
                     canvas.invalidate()
@@ -168,24 +165,37 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_up.setOnClickListener {
-            Snake.alive = true
+            if (!Snake.restart) {
+                Snake.alive = true
+            }
             if (Snake.direction != "down")
                 Snake.direction = "up"
         }
         button_down.setOnClickListener {
-            Snake.alive = true
+            if (!Snake.restart) {
+                Snake.alive = true
+            }
             if (Snake.direction != "up")
                 Snake.direction = "down"
         }
         button_left.setOnClickListener {
-            Snake.alive = true
+            if (!Snake.restart) {
+                Snake.alive = true
+            }
             if (Snake.direction != "right")
                 Snake.direction = "left"
         }
         button_right.setOnClickListener {
-            Snake.alive = true
+            if (!Snake.restart) {
+                Snake.alive = true
+            }
             if (Snake.direction != "left")
                 Snake.direction = "right"
+        }
+        resetButton.setOnClickListener {
+            Snake.alive = false
+            Snake.reset()
+            canvas.invalidate()
         }
     }
 }

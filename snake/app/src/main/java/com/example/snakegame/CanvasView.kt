@@ -49,7 +49,12 @@ class CanvasView @JvmOverloads constructor(
                 200f,
                 textPaint
             )
+        } else {
+            //Otherwise include the score in the game
+            canvas?.drawText(Snake.numbodyParts.toString(), 20f, 30f, textPaint)
         }
-
+        if (Snake.restart) {
+            canvas?.drawText("You have died. Press Reset to begin again", 350f, 200f, textPaint)
+        }
     }
 }
