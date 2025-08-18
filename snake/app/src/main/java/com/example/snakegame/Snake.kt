@@ -7,7 +7,7 @@ class Snake {
         var headY = 0f
         var bodyParts =
             mutableListOf(arrayOf(0f, 0f))
-        var direction = "right";
+        var direction = "none";
         var alive = false;
 
         fun possibleMove(): Boolean {
@@ -20,7 +20,7 @@ class Snake {
             headX = 0f;
             headY = 0f;
             bodyParts = mutableListOf(arrayOf(0f, 0f))
-            direction = "right";
+            direction = "none";
         }
     }
 }

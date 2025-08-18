@@ -28,7 +28,6 @@ class CanvasView @JvmOverloads constructor(
 
         // draw snake from array
         // left x, top y, right x+50, bottom y +50
-
         for (i in Snake.bodyParts){
             canvas?.drawRect(i[0], i[1], i[0]+45, i[1]+45, snakeBody)
         }
@@ -37,6 +36,20 @@ class CanvasView @JvmOverloads constructor(
         // left x, top y, right x+50, bottom y +50
         canvas?.drawRect(Food.posX, Food.posY, Food.posX +45, Food.posY +45,food)
 
+        //Give credit to the person who made this game
+        val textPaint = Paint().apply {
+            color = Color.WHITE // Or any color you want
+            textSize = 30f     // Set the text size
+            textAlign = Paint.Align.CENTER // Centers the text on the x-coordinate
+        }
+        if (Snake.direction == "none") {
+            canvas?.drawText(
+                "Credits to d-lehel @ Github:snake-android-game",
+                350f,
+                200f,
+                textPaint
+            )
+        }
 
     }
 }
